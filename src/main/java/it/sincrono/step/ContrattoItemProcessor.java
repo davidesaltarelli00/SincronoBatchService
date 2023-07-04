@@ -3,6 +3,7 @@ package it.sincrono.step;
 import org.slf4j.Logger;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Calendar;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -40,9 +41,14 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto,Contratto
 		
 		   Integer mesiDurata=contratto.getMesiDurata();
 		   
+		    
 
-	        int diffInMonths = Period.between(LocalDate.of(contratto.getDataAssunzione().getYear(), 
-	        	contratto.getDataAssunzione().getMonth()+1,contratto.getDataAssunzione().getDay()), LocalDate.now()).getMonths();
+		   Calendar calendar = Calendar.getInstance();
+		   
+		   calendar.setTime(contratto.getDataAssunzione());
+
+	       int diffInMonths  = (int)Period.between(LocalDate.of(calendar.get(Calendar.YEAR), 
+	        		calendar.get(Calendar.MONTH) + 1,calendar.get(Calendar.DAY_OF_MONTH)), LocalDate.now()).toTotalMonths();
 	  
 		   
 		   
