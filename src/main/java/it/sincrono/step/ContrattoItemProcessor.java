@@ -47,8 +47,14 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto,Contratto
 		   
 		   calendar.setTime(contratto.getDataAssunzione());
 
-	       int diffInMonths  = (int)Period.between(LocalDate.of(calendar.get(Calendar.YEAR), 
-	        		calendar.get(Calendar.MONTH) + 1,calendar.get(Calendar.DAY_OF_MONTH)), LocalDate.now()).toTotalMonths();
+	       Period period=Period.between(LocalDate.of(calendar.get(Calendar.YEAR), 
+	        		calendar.get(Calendar.MONTH) + 1,calendar.get(Calendar.DAY_OF_MONTH)), LocalDate.now());
+	       
+	        int years = period.getYears();
+        	int months = period.getMonths();
+	      
+
+	        int diffInMonths = years * 12 + months;
 	  
 		   
 		   

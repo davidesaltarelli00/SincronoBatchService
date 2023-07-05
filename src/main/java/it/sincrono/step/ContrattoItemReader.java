@@ -33,7 +33,7 @@ public class ContrattoItemReader implements ItemReader<Contratto> {
     @Override
     public Contratto read() {
         if (contratti == null || contratti.isEmpty()) {
-            contratti = fetchContrattiFromDatabase(3);
+            contratti = fetchContrattiFromDatabase(15);
             currentPage++;
         }
 
@@ -48,7 +48,7 @@ public class ContrattoItemReader implements ItemReader<Contratto> {
 
     private List<Contratto> fetchContrattiFromDatabase(int pageSize) {
     	
-    	String sql = "SELECT * FROM contratto c WHERE c.attivo = true LIMIT ? OFFSET ?";
+    	String sql = "SELECT * FROM contratto c WHERE c.attivo = true and c.id>0 LIMIT ? OFFSET ?";
 
         int offset = (currentPage) * pageSize;
 
