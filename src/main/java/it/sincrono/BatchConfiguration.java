@@ -2,7 +2,11 @@ package it.sincrono;
 
 
 
+import java.sql.Array;
+
 import javax.sql.DataSource;
+
+import it.sincrono.step.ContrattoItemProcessorScadenza;
 
 
 
@@ -18,6 +22,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
+import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -30,11 +35,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-
+import it.sincrono.entities.AnagraficaDto;
 import it.sincrono.entities.Contratto;
 import it.sincrono.map.ContrattoMapper;
 import it.sincrono.step.ContrattoItemProcessor;
 import it.sincrono.step.ContrattoItemReader;
+import it.sincrono.step.ContrattoItemReaderScadenza;
 
 
 
@@ -50,16 +56,27 @@ public class BatchConfiguration {
 	public StepBuilderFactory stepBuilderFactory;
 	
 	@Bean
-	public Job importEmployeesJob(JobExecutionListener listener, Step step1,Step step2) {
-	  return jobBuilderFactory.get("importEmployeesJob")
+	public Job importEmployeesJob(JobExecutionListener listener, Step step1,Step step2,Step step3) {
+	  return jobBuilderFactory.get("importBatchJob")
 	    .incrementer(new RunIdIncrementer())
 	    .listener(listener)
 	    .start(step1)
 	    .next(step2)
+	    .next(step3)
 	    .build();
 	}	
 	
+
+
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+    
 	
+	
+	
+	//step
 	
 	@Bean
 	public Step step1(JdbcBatchItemWriter<Contratto> writerStep1) {
@@ -83,16 +100,22 @@ public class BatchConfiguration {
 	    .build();
 	}
 	
+	
+	@Bean
+	public Step step3(JdbcBatchItemWriter<AnagraficaDto> writerStep5) {
+		
+	  return stepBuilderFactory.get("step3")
+	    .<AnagraficaDto, AnagraficaDto> chunk(5)
+	    .reader(readerStep2())
+	    .processor(processorStep2())
+	    .writer(writerStep5)
+	    .build();
+	}
+	
 
-	/*@Bean
-	public JdbcPagingItemReader<Contratto> readerStep1(DataSource dataSource, PagingQueryProvider queryProvider) {
-	    JdbcPagingItemReader<Contratto> reader = new JdbcPagingItemReader<>();
-	    reader.setDataSource(dataSource);
-	    reader.setQueryProvider(queryProvider);
-	    reader.setPageSize(100);
-	    reader.setRowMapper(new ContrattoMapper());
-	    return reader;
-	}*/
+
+	
+	//reader
 	
 	@Bean
 	@StepScope
@@ -100,8 +123,17 @@ public class BatchConfiguration {
 		
 		return new ContrattoItemReader();
 	}
+	
+	@Bean
+	@StepScope
+	public ContrattoItemReaderScadenza readerStep2() {
+		
+		return new ContrattoItemReaderScadenza();
+	}
 
 
+	
+	//processor
 	
 
 	
@@ -112,8 +144,18 @@ public class BatchConfiguration {
 	}
 	
 	
-
+	@Bean
+	public ContrattoItemProcessorScadenza processorStep2() {
+		
+		return new ContrattoItemProcessorScadenza();
+	}
 	
+	
+
+    
+    
+    //writer
+    
 	@Bean
 	public JdbcBatchItemWriter<Contratto> writerStep1(DataSource dataSource) {
 	   String updateQuery = "UPDATE contratto SET id_tipo_livello = :livelloContrattoId WHERE id = :id";
@@ -132,20 +174,6 @@ public class BatchConfiguration {
 	}
 
 
-    /*@Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/sincrono");
-        dataSource.setUsername("root");
-        dataSource.setPassword("sincrono");
-        return dataSource;
-    }*/
-
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
 	
 	
 	
@@ -164,5 +192,36 @@ public class BatchConfiguration {
                 .dataSource(dataSource)
                 .build();
     }
+    
+ 
+    
+    @Bean
+    public JdbcBatchItemWriter<AnagraficaDto> writerStep5(DataSource dataSource) {
+        String updateQuery = "UPDATE contratto c,commessa d,anagrafica a SET c.attivo=0,d.attivo=0,a.attivo=0 where c.id=:idContratto and d.id in(:idCommesse) and a.id=:idAnagrafica";
+        //String updateQuery1 = "UPDATE contratto SET attivo = FALSE WHERE id = :idContratto";
+        //String updateQuery2 = "UPDATE Anagrafica SET attivo = FALSE WHERE id = :idAnagrafica;";
+    	
+    
+        
+        
+        return new JdbcBatchItemWriterBuilder<AnagraficaDto>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql(updateQuery)
+                
+                //.sql(updateQuery1)
+                //.sql(updateQuery2)
+                .itemSqlParameterSourceProvider(item -> {
+                    MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+                    parameterSource.addValue("idCommesse",item.getCommesse());
+                    parameterSource.addValue("idContratto",item.getContratto().getId());
+                    parameterSource.addValue("idAnagrafica",item.getAnagrafica().getId());
+                    return parameterSource;
+                })
+                .dataSource(dataSource)
+                .build();
+    }
+    
+ 
+
 
 }

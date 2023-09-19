@@ -5,7 +5,7 @@ CREATE TABLE contratto (
   id_tipo_contratto INT,
   id_tipo_livello INT,
   id_tipo_azienda INT,
-  id_contratto_nazionale INT,
+  id_tipo_ccnl INT,
   attivo BOOLEAN,
   sede_assunzione VARCHAR(255),
   qualifica VARCHAR(255),
@@ -40,5 +40,5 @@ CREATE TABLE contratto (
   FOREIGN KEY (id_tipo_contratto) REFERENCES tipo_contratto(id),
   FOREIGN KEY (id_tipo_livello) REFERENCES livello_contratto(id),
   FOREIGN KEY (id_tipo_azienda) REFERENCES tipo_azienda(id),
-  FOREIGN KEY (id_contratto_nazionale) REFERENCES contratto_nazionale(id)
+  FOREIGN KEY (id_tipo_ccnl) REFERENCES tipo_ccnl(id)
 );
