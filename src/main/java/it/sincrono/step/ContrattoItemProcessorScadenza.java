@@ -31,6 +31,12 @@ public class ContrattoItemProcessorScadenza implements ItemProcessor<AnagraficaD
 
 	private boolean checkScadenza(AnagraficaDto anagraficaDto) {
 		
+		if(anagraficaDto.getContratto().getTipoContratto().getId()==2 ||
+				anagraficaDto.getContratto().getTipoContratto().getId()==4) {
+			
+			return false;
+		}
+		
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(anagraficaDto.getContratto().getDataAssunzione());

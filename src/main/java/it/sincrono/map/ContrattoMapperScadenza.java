@@ -14,6 +14,8 @@ import it.sincrono.entities.Commessa;
 import it.sincrono.entities.Ccnl;
 import it.sincrono.entities.Contratto;
 import it.sincrono.entities.LivelloContratto;
+import it.sincrono.entities.TipoContratto;
+
 import java.util.ArrayList;
 
 public class ContrattoMapperScadenza implements RowMapper<AnagraficaDto> {
@@ -33,9 +35,14 @@ public class ContrattoMapperScadenza implements RowMapper<AnagraficaDto> {
 
 		contratto.setId(rs.getInt("c.id"));
 
-		contratto.setDataAssunzione((Date) rs.getDate("data_assunzione"));
+		contratto.setDataAssunzione((Date) rs.getDate("c.data_assunzione"));
 
-		contratto.setMesiDurata(rs.getInt("mesi_durata"));
+		contratto.setMesiDurata(rs.getInt("c.mesi_durata"));
+		
+		TipoContratto tipoContratto = new TipoContratto();
+		tipoContratto.setId(rs.getInt("c.id_tipo_contratto"));
+		contratto.setTipoContratto(tipoContratto);
+
 
 		anagraficaDto.setContratto(contratto);
 

@@ -1,6 +1,7 @@
 package it.sincrono.map;
 
 import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import it.sincrono.entities.Ccnl;
 import it.sincrono.entities.Contratto;
 import it.sincrono.entities.LivelloContratto;
+import it.sincrono.entities.TipoContratto;
 
 public class ContrattoMapper implements RowMapper<Contratto> {
 
@@ -25,6 +27,10 @@ public class ContrattoMapper implements RowMapper<Contratto> {
 		Ccnl ccnl = new Ccnl();
 		ccnl.setId(rs.getInt("id_tipo_ccnl"));
 		contratto.setCcnl(ccnl);
+		
+		TipoContratto tipoContratto = new TipoContratto();
+		tipoContratto.setId(rs.getInt("id_tipo_contratto"));
+		contratto.setTipoContratto(tipoContratto);
 
 		contratto.setDataAssunzione(rs.getDate("data_assunzione"));
 

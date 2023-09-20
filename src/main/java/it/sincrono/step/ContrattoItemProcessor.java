@@ -31,6 +31,12 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 	private boolean calcolaLivelloContratto(Contratto contratto) {
 
 		boolean check = false;
+		
+		if(contratto.getTipoContratto().getId()==2 ||
+				contratto.getTipoContratto().getId()==4) {
+			
+			return false;
+		}
 
 		Integer mesiDurata = contratto.getMesiDurata();
 
@@ -46,15 +52,15 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 		int diffInMonths = years * 12 + months;
 
-		if (contratto.getCcnl().getId() == 0) {
+		if (contratto.getCcnl().getId() == 1) {
 
 			mesiDurata = mesiDurata / 3;
 
 			if (diffInMonths == mesiDurata) {
 
-				if (contratto.getLivelloContratto().getId() < 9) {
+				if (contratto.getLivelloContratto().getId()>19) {
 
-					contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
+					contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() -1);
 
 					check = true;
 
@@ -64,7 +70,7 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 				if (diffInMonths == (mesiDurata * 2)) {
 
-					if (contratto.getLivelloContratto().getId() < 9) {
+					if (contratto.getLivelloContratto().getId() >19) {
 
 						contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
 
@@ -76,7 +82,7 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 					if (diffInMonths == (mesiDurata * 3)) {
 
-						if (contratto.getLivelloContratto().getId() < 9) {
+						if (contratto.getLivelloContratto().getId() >19) {
 
 							contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
 
@@ -91,14 +97,26 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 			}
 
 		} else {
+			
+			Integer livelloMassimo = null;
+			
+			if(contratto.getCcnl().getId()==2) {
+				
+				livelloMassimo=1;
+				
+			}else if(contratto.getCcnl().getId()==3) {
+				
+				livelloMassimo=11;
+				
+			}
 
 			mesiDurata = mesiDurata / 2;
 
 			if (diffInMonths == mesiDurata) {
 
-				if (contratto.getLivelloContratto().getId() < 9) {
+				if (contratto.getLivelloContratto().getId() >livelloMassimo) {
 
-					contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
+					contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() - 1);
 
 					check = true;
 
@@ -108,9 +126,9 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 				if (diffInMonths == (mesiDurata * 2)) {
 
-					if (contratto.getLivelloContratto().getId() < 9) {
+					if (contratto.getLivelloContratto().getId() > livelloMassimo) {
 
-						contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
+						contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() - 1);
 
 						check = true;
 
