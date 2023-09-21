@@ -72,7 +72,7 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 					if (contratto.getLivelloContratto().getId() >19) {
 
-						contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
+						contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() - 1);
 
 						check = true;
 
@@ -84,7 +84,7 @@ public class ContrattoItemProcessor implements ItemProcessor<Contratto, Contratt
 
 						if (contratto.getLivelloContratto().getId() >19) {
 
-							contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() + 1);
+							contratto.getLivelloContratto().setId(contratto.getLivelloContratto().getId() - 1);
 
 							check = true;
 

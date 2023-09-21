@@ -52,15 +52,35 @@ public class ContrattoItemReaderScadenza implements ItemReader<AnagraficaDto> {
 
 	private List<AnagraficaDto> fetchAnagraficaFromDatabase() {
 
-		String sql = "SELECT\r\n" + "    a.id,\r\n" + "    c.id,\r\n" + "    c.data_assunzione,\r\n"
-				+ "    c.mesi_durata,\r\n" + "    e.id\r\n" + "FROM\r\n" + "    anagrafica a\r\n" + "INNER JOIN\r\n"
-				+ "    storico_contratti b ON a.id = b.id_anagrafica\r\n" + "INNER JOIN\r\n"
-				+ "    contratto c ON b.id_contratto = c.id\r\n" + "INNER JOIN\r\n"
-				+ "    storico_commesse d ON d.id_anagrafica = a.id\r\n" + "INNER JOIN\r\n"
-				+ "    commessa e ON d.id_commessa = e.id\r\n" + "WHERE\r\n" + "    c.id = (\r\n" + "        SELECT\r\n"
-				+ "            MAX(c1.id)\r\n" + "        FROM\r\n" + "            contratto c1\r\n"
-				+ "        INNER JOIN\r\n" + "            storico_contratti s ON s.id_contratto = c1.id\r\n"
-				+ "        WHERE\r\n" + "            s.id_anagrafica = a.id\r\n" + "    )\r\n" + "";
+		String sql = "SELECT\r\n" +
+	             "    a.id,\r\n" +
+	             "    c.id,\r\n" +
+	             "    c.data_assunzione,\r\n" +
+	             "    c.mesi_durata,\r\n" +
+	             "    e.id,\r\n" +
+	             "    c.id_tipo_contratto\r\n" +
+	             "FROM\r\n" +
+	             "    anagrafica a\r\n" +
+	             "INNER JOIN\r\n" +
+	             "    storico_contratti b ON a.id = b.id_anagrafica\r\n" +
+	             "INNER JOIN\r\n" +
+	             "    contratto c ON b.id_contratto = c.id\r\n" +
+	             "INNER JOIN\r\n" +
+	             "    storico_commesse d ON d.id_anagrafica = a.id\r\n" +
+	             "INNER JOIN\r\n" +
+	             "    commessa e ON d.id_commessa = e.id\r\n" +
+	             "WHERE\r\n" +
+	             "    c.id = (\r\n" +
+	             "        SELECT\r\n" +
+	             "            MAX(c1.id)\r\n" +
+	             "        FROM\r\n" +
+	             "            contratto c1\r\n" +
+	             "        INNER JOIN\r\n" +
+	             "            storico_contratti s ON s.id_contratto = c1.id\r\n" +
+	             "        WHERE\r\n" +
+	             "            s.id_anagrafica = a.id\r\n" +
+	             "    )";
+
 
 		// int offset = (currentPage) * pageSize;
 
