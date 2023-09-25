@@ -1,15 +1,17 @@
 package it.sincrono.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tipo_contratto_nazionale")
-public class ContrattoNazionale {
+public class Ccnl {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +21,13 @@ public class ContrattoNazionale {
 	@Column(name = "descrizione")
 	private String descrizione;
 
-	public ContrattoNazionale(Integer id, String descrizione) {
+	public Ccnl(Integer id, String descrizione) {
 		super();
 		this.id = id;
 		this.descrizione = descrizione;
 	}
 
-	public ContrattoNazionale() {
+	public Ccnl() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

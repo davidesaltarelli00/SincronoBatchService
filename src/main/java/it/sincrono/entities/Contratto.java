@@ -2,17 +2,15 @@ package it.sincrono.entities;
 
 import java.util.Date;
 
-import java.util.Objects;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "contratto")
@@ -36,8 +34,8 @@ public class Contratto {
 	private TipoAzienda tipoAzienda;
 
 	@ManyToOne
-	@JoinColumn(name = "id_contratto_nazionale")
-	private ContrattoNazionale contrattoNazionale;
+	@JoinColumn(name = "id_tipo_ccnl")
+	private Ccnl ccnl;
 
 	@Column(name = "attivo")
 	private Boolean attivo;
@@ -98,7 +96,7 @@ public class Contratto {
 
 //	@Column(name = "data_visita_medica")
 //	private Date dataVisitaMedica;
-	
+
 	@Column(name = "ticket")
 	private String ticket;
 
@@ -136,20 +134,20 @@ public class Contratto {
 	private String canaleReclutamento;
 
 	public Contratto(Integer id, TipoContratto tipoContratto, LivelloContratto livelloContratto,
-			TipoAzienda tipoAzienda, ContrattoNazionale contrattoNazionale, Boolean attivo, String sedeAssunzione,
-			String qualifica, Date dataAssunzione, Date dataInizioProva, Date dataFineProva, Date dataFineRapporto,
-			Integer mesiDurata, String livelloAttuale, String livelloFinale, Boolean dimissioni,
-			Boolean partTime, Boolean partTimeA, String retribuzioneMensileLorda, String superminimoMensile,
-			String ralAnnua, String superminimoRal, String diariaMese, String diariaGg, String ticket,
-			String valoreTicket, Boolean categoriaProtetta, String tutor, String pfi, String assicurazioneObbligatoria,
-			Date corsoSicurezza, String motivazioneFineRapporto, Boolean pc, String scattiAnzianita,
-			String tariffaPartitaIva, String canaleReclutamento) {
+			TipoAzienda tipoAzienda, Ccnl ccnl, Boolean attivo, String sedeAssunzione, String qualifica,
+			Date dataAssunzione, Date dataInizioProva, Date dataFineProva, Date dataFineRapporto, Integer mesiDurata,
+			String livelloAttuale, String livelloFinale, Boolean dimissioni, Boolean partTime, Boolean partTimeA,
+			String retribuzioneMensileLorda, String superminimoMensile, String ralAnnua, String superminimoRal,
+			String diariaMese, String diariaGg, String ticket, String valoreTicket, Boolean categoriaProtetta,
+			String tutor, String pfi, String assicurazioneObbligatoria, Date corsoSicurezza,
+			String motivazioneFineRapporto, Boolean pc, String scattiAnzianita, String tariffaPartitaIva,
+			String canaleReclutamento) {
 		super();
 		this.id = id;
 		this.tipoContratto = tipoContratto;
 		this.livelloContratto = livelloContratto;
 		this.tipoAzienda = tipoAzienda;
-		this.contrattoNazionale = contrattoNazionale;
+		this.ccnl = ccnl;
 		this.attivo = attivo;
 		this.sedeAssunzione = sedeAssunzione;
 		this.qualifica = qualifica;
@@ -188,13 +186,7 @@ public class Contratto {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	
 
-
-	
 	public Contratto(Integer id) {
 		super();
 		this.id = id;
@@ -232,12 +224,12 @@ public class Contratto {
 		this.tipoAzienda = tipoAzienda;
 	}
 
-	public ContrattoNazionale getContrattoNazionale() {
-		return contrattoNazionale;
+	public Ccnl getCcnl() {
+		return ccnl;
 	}
 
-	public void setContrattoNazionale(ContrattoNazionale contrattoNazionale) {
-		this.contrattoNazionale = contrattoNazionale;
+	public void setCcnl(Ccnl ccnl) {
+		this.ccnl = ccnl;
 	}
 
 	public Boolean getAttivo() {
@@ -488,11 +480,11 @@ public class Contratto {
 		this.canaleReclutamento = canaleReclutamento;
 	}
 
-	public Contratto(TipoContratto tipoContratto, TipoAzienda tipoAzienda, ContrattoNazionale contrattoNazionale) {
+	public Contratto(TipoContratto tipoContratto, TipoAzienda tipoAzienda, Ccnl ccnl) {
 		super();
 		this.tipoContratto = tipoContratto;
 		this.tipoAzienda = tipoAzienda;
-		this.contrattoNazionale = contrattoNazionale;
+		this.ccnl = ccnl;
 	}
 
 }
