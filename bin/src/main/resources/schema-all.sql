@@ -37,8 +37,8 @@ CREATE TABLE contratto (
   scatti_anzianita VARCHAR(255),
   tariffa_partita_iva VARCHAR(255),
   canale_reclutamento VARCHAR(255),
-  FOREIGN KEY (id_tipo_contratto) REFERENCES tipo_contratto(id_tipo_contratto), 
-  FOREIGN KEY (id_tipo_livello) REFERENCES livello_contratto(id_tipo_livello),
-  FOREIGN KEY (id_tipo_azienda) REFERENCES tipo_azienda(id_tipo_azienda), 
-  FOREIGN KEY (id_tipo_ccnl) REFERENCES tipo_ccnl(id_tipo_ccnl)
+  FOREIGN KEY (id_tipo_contratto) REFERENCES tipo_contratto(id),
+  FOREIGN KEY (id_tipo_livello) REFERENCES livello_contratto(id),
+  FOREIGN KEY (id_tipo_azienda) REFERENCES tipo_azienda(id),
+  FOREIGN KEY (id_tipo_ccnl) REFERENCES tipo_ccnl(id)
 );
